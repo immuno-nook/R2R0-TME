@@ -1,5 +1,3 @@
-[![DOI](https://zenodo.org/badge/1206519664.svg)](https://doi.org/10.5281/zenodo.20578163)
-
 # R2R0-TME
 scRNA-seq analysis pipeline of post-surgical tumor immune microenvironment in sarcoma murine model
 
@@ -15,3 +13,6 @@ If you use our data or code for your work please cite the following publication:
 ## Key Software and R Packages Used
 - R (5.3.0)
 - Seurat (v5),  ggplot2, dplyr, sccomp, msigdbr, AUCell, escape, fgseas, DESeq2, CellChat
+
+## Zenodo DOI link
+https://doi.org/10.5281/zenodo.20578163
