@@ -1,0 +1,34 @@
+Analyses and figure generation were performed in R using publicly available packages and established computational workflows.
+Standard preprocessing steps (Seurat-based QC filtering, scDblFinder, normalization (SCTransform), dimensionality reduction, clustering, and differential expression) followed widely used published tutorials.
+Figure-specific analyses are summarized below.
+
+## Fig 2A, Supp Fig 3C, Supp Fig 5A, Supp Fig 7D
+Seurat workflow: QC filtering, SCTransform normalization, PCA, UMAP visualization, clustering, differential gene expression, and manual cell type annotation
+Seurat
+
+## Fig 2D
+Gene set enrichment analysis using irGSEA
+https://github.com/chuiqin/irGSEA
+
+## Fig 2F, Supp Fig 2, Supp Fig 4
+Cell–cell communication analysis using CellChat (ligand–receptor inference)
+https://github.com/jinworks/CellChat
+
+## Supp Fig 3A, Supp Fig 5D, Supp Fig 7C
+ssGSEA scoring using escape package
+https://github.com/BorchLab/escape
+
+## Supp Fig 3B
+AUCell gene set activity analysis
+https://github.com/aertslab/AUCell
+
+## Supp Fig 3D, Supp Fig 5B, Supp Fig 7E
+Cell composition and relative abundance analysis using sccomp and ggplot2
+
+## Supp Fig 3G, Supp Fig 5C
+Trajectory inference using Slingshot
+https://github.com/kstreet13/slingshot
+
+## Supp Fig 3H
+Single-cell reference mapping using Seurat integration and label transfer
+https://satijalab.org/seurat/articles/integration_mapping.html
