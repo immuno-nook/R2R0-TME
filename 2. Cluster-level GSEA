@@ -1,5 +1,5 @@
 #====================================
-### Supp Figure 2E. Cluster-level GSEA using literature-derived gene signatures
+### Cluster-level GSEA using literature-derived gene signatures
 #====================================
 
 DefaultAssay(pmn_cells) <- "RNA"
