@@ -1,4 +1,5 @@
-[![DOI](https://zenodo.org/badge/1206519664.svg)](https://doi.org/10.5281/zenodo.20578163)
+.. image:: https://zenodo.org/badge/1206519664.svg
+  :target: https://doi.org/10.5281/zenodo.20578163
 
 # R2R0-TME
 scRNA-seq analysis pipeline of post-surgical tumor immune microenvironment in sarcoma murine model
