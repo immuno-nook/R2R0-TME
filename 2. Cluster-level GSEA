@@ -1,5 +1,5 @@
 #====================================
-### Supp Figure 2E. Cluster-level GSEA using  literature-derived gene signatures
+### Supp Figure 2E. Cluster-level GSEA using literature-derived gene signatures
 #====================================
 
 DefaultAssay(pmn_cells) <- "RNA"
@@ -213,14 +213,3 @@ p <- ggplot(gsea_combined, aes(x = Cluster, y = pathway)) +
     y = "Signatures",
     title = "PMN cluster GSEA using Established Signatures"
   )
-
-# ===============================
-# OTHER FIGURE COMPONENTS
-# ===============================
-# Supp Fig 2A: ssGSEA using escape pacakge (see https://github.com/BorchLab/escape)
-# Supp Fig 2B: AUCell analysis (see https://github.com/aertslab/AUCell)
-# Supp Fig 2C: UMAP after Seurat pipeline
-# Supp Fig 2D: Composition + relative abundance (sccomp + ggplot)
-# Supp Fig 2F: Dotplot of selected genes
-# Supp Fig 2G: Slingshot trajectory analysis (see https://github.com/kstreet13/slingshot)
-# Supp Fig 2H: Single-cell reference mapping using Seurat (see https://satijalab.org/seurat/articles/integration_mapping.html)
