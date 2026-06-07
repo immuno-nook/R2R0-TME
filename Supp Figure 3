@@ -1,0 +1,226 @@
+#====================================
+### Supp Figure 2E. Cluster-level GSEA using  literature-derived gene signatures
+#====================================
+
+DefaultAssay(pmn_cells) <- "RNA"
+Idents(pmn_cells) <- "cluster"
+pmn_markers <- FindAllMarkers(
+  pmn_cells,
+  only.pos = FALSE,
+  min.pct = 0.25,
+  logfc.threshold = 0.25,
+  test.use = "wilcox")
+
+gene.sets <- list(
+  Matured_Neu_Sig = c("Retnlg", "Ccl6", "S100A6", "Clec4D", "Prr13", "Cebpb", "Slpi", "S100A11", "Btg1", "Cxcr2", "Fth1", "Grina", "Mmp8", "Fxyd5", "Msrb1", "H2-D1", "Anxa2", "Mmp9", "Ftl1", "Map1Lc3B", "Tmcc1", "Sat1", "Cyp4F18", "Junb", "Mxd1", "Stk17B", "Ypel3", "Selplg", "Il1F9", "Dusp1", "Slc16A3", "Ccr1", "Rdh12", "Clec4E", "Arg2", "Cd300Ld", "Amica1", "Ctsd", "Gda", "Hacd4", "Timp2", "Fpr1", "Ifi27L2A", "Slc7A11", "Stfa2L1", "Il1B", "Asprv1", "Cxcl2", "Gm5483", "Ifitm1"),
+  T1_Neu_Sig = c("Ltc4S", "Mmp8", "Mmp9", "Ppia", "Prr13", "Ptma", "Retnlg"),
+  T2_Neu_Sig = c("Cxcr2", "Cd300Ld", "Dusp1", "Gbp2", "Ifitm1", "Il1B", "Isg15", "Jaml", "Junb", "Msrb1", "Osm", "S100A6", "Selplg", "Slpi"),
+  T3_Neu_Sig = c("Atf3", "Ccl3", "Ccl4", "Cd274", "Cstb", "Cxcl3", "Hcar2", "Hilpda", "Hk2", "Hmox1", "Ier3", "Jun", "Ldha", "Mif", "Plin2", "Spp1", "Tgif1", "Tnfrsf23", "Vegfa", "Zeb2"),
+  PMN_MDSC = c("Ngp", "Camp", "Ltf", "Chil3", "Lcn2", "Iftm6", "Lyz2", "Cybb", "Serpinb1a", "Cd177", "Anxa1", "Mmp8", "Adpgk", "Dstn", "Arhgdib", "S100a8", "AA467197", "Tkt", "Wfdc21", "Capg", "Cebpe", "S100a9", "Syn1", "Pglyrp1", "Ltb4r1", "Lgals3", "Tmsb10", "Olfm4", "Hmgn2", "Ceacam10", "H2afz"),
+  Activated_PMN_MDSC = c("Ccl4", "Ccl3", "Cxcl3", "Jun", "Ccrl2", "Saa3", "Spp1", "Gad45b", "Il1b", "Clec4n", "Hcar2", "Basp1", "Nfkbia", "Btg1", "Il1rn", "Ifrd1", "Txnip", "Ccl9", "Ier3", "Rs1", "Thbs1", "Cxcl1", "Hilpda", "Hist1h1c", "Srgn", "Hspa5", "Csf1", "Pgts2", "Xbp1"),
+  Ly6Ehi_Neu_Sig = c("Il1a", "Tnf", "Cxcl1", "Saa3", "Ccl3", "Cxcl3", "Ly6e", "Ccl4", "Il23a", "Cxcl2"))
+Cd74_Neu_Sig <- c("PTPRCAP", "IGKV3-20", "HLA-DPB1", "HLA-DPA1", "AHNAK", "HLA-DQA1", "CD52", "CD99", "CRIP1", "HLA-DRB1", "NME2", "CCL5", "S100A10", "HLA-DQB1", "IL32", "PPDPF", "EZR", "NR4A1", "H1FX", "COX7C", "RACK1", "HNRNPA1", "NPM1", "COX6C", "SNRPD2", "PPIA", "GSTP1", "RAN", "CALR", "CD69", "ATF3", "SLC25A6", "CACYBP", "SNHG8", "CYCS", "TSPYL2", "HLA-DRA", "SRSF7", "SLC25A5", "SSR4", "HINT1", "ATP5MC2", "PTMA", "DYNLL1", "RGCC", "LGALS1", "FXYD5", "NCL", "DNAJB1", "TUBA1B", "ATP5F1D", "PTGES3", "CD74", "EIF3H", "JUN", "BTF3", "NDUFA4", "TOMM7", "DDX24", "YBX1", "EIF3K", "HNRNPDL", "MIF", "NACA", "UBB", "TMSB10", "COX4I1", "CCL4", "PFDN5", "FTH1", "EDF1", "FAU", "UQCRH", "PPIB", "DUSP2", "GAPDH", "COMMD6", "HMGN1", "CD83", "CCL4L2", "SEC61G", "UBC", "GPX4", "IGKC", "CCL3", "POLR2L", "RHOH", "PDIA3", "TPT1", "CDKN1A", "RBM3", "CIRBP", "ATP5MG", "LGALS3", "SNRPG", "SET", "ATP5MF", "HNRNPA0", "ANXA1", "OST4", "PKM", "CCL3L1", "CHCHD2", "SUMO2", "UQCRQ", "CIB1", "DBI", "LY6E", "TPI1", "LDHA", "SEC61B", "UQCRB", "SCAND1", "SERF2", "HMGN2", "ATP5MD", "EIF5A", "UQCR10", "UBXN1", "EIF4A2", "ENO1", "PSME2", "MARCKSL1", "UBA52", "ALDOA", "RHOB", "DNAJA1", "BIRC3", "DDIT4", "MT2A", "COX6A1", "SLC25A3", "SF3B5", "TMEM258", "ARF6", "TRA2B", "C9orf16", "ATP6V1F", "SAP18", "TRMT112", "ZFP36L2", "EPC1", "ANAPC16", "PMAIP1", "H2AFV", "HCST", "KHDRBS1", "CST3", "HNRNPL", "KLF6", "BHLHE40", "TUBB4B", "JUND", "SKP1", "SRRM1", "IER5", "C15orf48", "PABPC1", "SERTAD1", "RBM8A", "ARGLU1", "FNBP1", "COX7A2", "UBE2S", "NR4A2", "CCNH", "COX8A", "PLP2", "ATP5ME", "ATP5IF1", "PSMB1", "ANXA5", "HNRNPA2B1", "COX7B", "RSRC2", "TRIR", "EGR1", "HERPUD1", "EIF4A3")
+Blood_Neu_Sig1 <- c("COP1", "SSH2", "GLT1D1", "MEGF9", "MYO1F", "RAB11FIP1", "SORL1", "CPPED1", "CELF2", "TNRC6B", "STK17B", "SRPK2", "MED13L", "LRRK2", "APBB1IP", "SMAP2", "PARP8", "NCOA1", "ANKRD44", "ACAP2", "NCOA2", "DOCK5", "AGTPBP1", "RNF24", "LRRFIP1", "NIBAN1", "XPO6", "NUMB", "PRKCB", "VMP1", "RIPOR2", "PTEN", "SMCHD1", "FAM49B", "CAMK1D", "PTPRC", "LYN", "ARHGAP15", "SOS2", "RICTOR", "PAN3", "ABHD2", "MAP3K2", "PTPRJ", "BAZ2B", "CHST11", "PPP1R12A", "ELF2", "CPQ", "FOXO3", "MAP3K5", "ENTPD1", "PPP3CA", "UBR2", "DOCK2", "SLCO3A1", "PCNX1", "PREX1", "PLXNC1", "PHF21A", "HIPK3", "LRMP", "MAPK1", "PKN2", "PIAS1", "ASAP1", "ROCK1", "IQGAP1", "WDFY3", "USP32", "AOAH", "PIK3CD", "PICALM", "CREBBP", "MBNL1", "RAP1GAP2", "YPEL5", "FYB1", "TGFBR2", "KMT2C", "SLC12A6", "IGF1R", "PELI2", "EPHB1", "ELMO1", "RELL1", "CREB5", "SH3KBP1", "SNRK", "RASSF3", "CDC42SE2", "INPP5D", "UBE2R2", "GAB2", "RAPGEF2", "MAPK14", "AGO4", "NIPBL", "RBM39", "ACTR2", "KDM2A", "OSBPL8", "ZFAND3", "FBXW7", "TBL1X", "FOXP1", "CUL3", "VPS13B", "MME", "LYST", "PLXDC2", "CDK19", "DPYD", "USP15", "TMCC1", "RPS6KA5", "UBE2D3", "STK10", "IGF2R", "VSIR", "NEDD9", "CCNJL", "FKBP5", "SLC11A1", "TBC1D1", "ARID4B", "STK4", "PACSIN2", "PACS1", "KDM4B", "ARHGEF40", "MGAM", "ARHGAP25", "SULF2", "CACUL1", "ST8SIA4", "JARID2", "TMEM164", "CIR1", "FAM126B", "CHST15", "MAP3K1", "CR1", "ALPL", "LIMK2", "MAP3K3", "KIF13A", "TET2", "USP4", "LINC00486", "FBXO33", "FMNL1", "VNN2", "DGLUCY", "IP6K1", "MTRNR2L12", "REPS2", "DOCK8", "DYSF", "TMEM154", "PTPRE", "MAP2K4", "WIPF1", "TUBA1A", "USP3", "MIR29B2CHG", "ZDHHC18", "ECE1", "ITPK1", "PPP1CB", "FGD3", "MICAL2", "RB1CC1", "GNA13", "AHCTF1", "HCK", "DIP2B", "RNF130", "EPB41", "WWP2", "FRY", "JAML", "PDE3B", "PHC2", "ABHD15-AS1", "CCND3", "JMJD1C", "HECW2", "SEMA4D", "KLHL2", "SLC44A2", "COTL1", "MAN1A1", "NDEL1", "ACSL4", "AC022217.3", "WDR26", "AP001011.1", "RFX2", "TECPR2", "SUSD6", "AP003086.1", "TCP11L2", "IFNAR2", "DHRSX", "AKNA", "FPR1", "STAT5B", "ATP2B1", "LRP10", "EP300", "ARHGAP30", "IL17RA", "SBF2", "DOCK11", "EIF4E3", "TOP1", "ABHD3", "IL1R2", "ADAM19", "MIDN", "TBC1D14", "TUT7", "PPP4R1", "RNASET2", "MAP4K4", "ITCH", "TPST1", "GPR155", "UBE4B", "PLCG2", "KIAA0232", "GRB2", "MCTP2", "RNF10", "LMTK2", "GNAI3", "ARNTL", "KLF3", "ADGRE2", "FBXL20", "DGCR2", "CNTNAP3B", "FNIP1", "NLRP1", "TNFRSF10C", "SIRPB2", "SLC6A6", "ZNF586", "FAM49A", "KIAA0825", "RESF1", "CFLAR", "ELL", "KIF1B", "DYRK1A", "RAB2A", "IPMK", "SH3GLB1", "ST3GAL2", "RRP12", "MOB3A", "OGA", "GSK3B", "KAT6A", "KIAA1324", "BCAS3", "EPS15L1", "CSNK1D", "UIMC1", "CNTNAP3", "SIK3", "RPS6KA3", "SYNE2", "LAPTM4A", "EGLN1", "MKLN1", "NLRP12", "VNN3", "NDE1", "SKAP2", "CAB39", "FCGR3B", "AL513327.1", "KDM7A", "MAST3", "ADGRE5", "DPEP2", "LMBRD1", "PHF12", "CREBRF", "RC3H1", "MPZL1", "SP3", "SPI1", "RASSF2", "STK40", "SVIL", "ZNF429", "SLMAP", "SLC37A3", "PXN", "DHX34", "ZNF516", "KANSL1", "CEP63", "TLR2", "SHOC1", "ACOX1", "RAP1A", "GAB1", "UBXN2B", "ATP11B", "NR3C1", "ARAP1", "ANKRD13A", "NIN", "MAK", "UHRF1BP1L", "NHSL2")
+Blood_Neu_Sig2 <- c("NOTCH2", "CLIP1", "TLE3", "RAPGEF1", "XRN2", "FBXL13", "DECR1", "CMIP", "CCM2", "MYO9B", "CD46", "COQ7", "GIT2", "KDM6A", "DISC1", "LPCAT3", "ZNF148", "HBP1", "INKA2", "PPM1F", "OSBPL2", "SASH3", "ATF6", "SESN2", "ATG16L2", "SH2D3C", "CA4", "HPCAL1", "MAML3", "SNX10", "CASP8", "STX3", "KCNQ1", "FAM53B", "HECA", "ATP6V1A", "MBOAT7", "NUP153", "RAB43", "BIN3", "UBE2D1", "ALPK1", "IFNGR1", "CNTNAP3C", "AL390957.1", "CUX1", "PPCDC", "NFAM1", "AC114760.2", "FLI1", "CFAP45", "IQGAP2", "IRS2", "BTNL8", "AP1G1", "VPS8", "CYB5R4", "ZER1", "SNX18", "RGS18", "PPP3R1", "TAOK3", "KREMEN1", "CTSS", "CBL", "TLE4", "MTMR3", "RPS6KA1", "DENND3", "SARAF", "HSDL2", "CTBS", "SHKBP1", "FOXO1", "NUAK2", "ADGRE3", "PRKCZ", "SETD2", "ITM2B", "ULK1", "C5AR2", "PYGL", "SHOC2", "KCMF1", "GAS7", "MTRNR2L8", "HCG27", "FOXN3", "DAPK2", "FBXO11", "CDH23", "CAMK2G", "JAK3", "LPIN2", "NPEPPS", "WDFY4", "THEMIS2", "TLR1", "IDS", "ORAI2", "NCF1", "LILRB3", "NACC2", "ANXA4", "TXNIP", "SLC15A4", "RNF13", "EXOC6", "CAPZA1", "B3GNTL1", "PFKFB4", "ARID4A", "CXCR2", "SELPLG", "UNKL", "DLEU2", "SMURF1", "BMP2K", "AL445584.2", "CCDC69", "RIN3", "C16orf72", "PAFAH1B1", "OSBPL9", "DDX6", "PTBP3", "AL627309.5", "TFEB", "Z94721.1", "NEK7", "AC068282.1", "EEPD1", "PTAFR", "BICRAL", "WIPI2", "RNF169", "MEF2D", "PPP2R5C", "CDC123", "TNRC18", "GATAD2B", "SLA", "PPP2R5A", "RBM33", "RABGEF1", "SRPK1", "PAK2", "WLS", "R3HDM4", "ARSG", "EXTL3", "SAMD8", "SLC22A4", "RBM23", "TGFA", "CRISPLD2", "ATXN7", "MED25", "KDM5A", "PRKD2", "SNX13", "FAR1", "ERBIN", "CLASRP", "SLC49A4", "DOK3", "PIGB", "CCNG2", "MTMR10", "BOD1L1", "OSBPL11", "RSBN1L", "AC090559.1", "MAPKAPK2", "ZNF394", "AATK", "CDK11B", "ZNF652", "TAX1BP1", "CCPG1", "HMOX2", "TLR6", "AC079793.1", "SNX27", "HSPBAP1", "TMEM140", "TCF25", "ENTPD1-AS1", "AKAP13", "FCHO2", "TBC1D22A", "RNF11", "AC123912.1", "APC", "ARPC2", "IL10RB", "IL13RA1", "AL359762.1", "LASP1", "LINC01002", "EAPP", "SENP7", "ITSN2", "MSL1", "RNF138", "CHD4", "MDM2", "SP110", "WWC3", "LINC-PINT", "TACC1", "TXNRD1", "FAM214A", "PRKACA", "OAZ2", "RERE", "P2RX1", "TRIM8", "SCLT1", "XPC", "HAL", "C18orf25", "ANKHD1", "NCOA3", "RTN3", "PCMTD1", "ST3GAL1", "BCLAF1", "NT5C2", "WASF2", "FCGR3A", "AMPD2", "TMEM65", "CDK14", "MGRN1", "ITPR2", "ST3GAL4", "PPM1A", "PHF20", "SAP130", "HSD17B11", "ADIPOR1", "MIA2", "PHTF1", "STX7", "ARID1A", "ZYG11B", "CDS2", "ZNF106", "RAB11FIP4", "BID", "F5", "MARK3", "LPAR2", "VAV3", "TSC22D3", "WDTC1", "WAC", "AP001977.1", "CYTH1", "SGMS1", "ARL15", "CCNY", "CCNK", "SENP6", "LBR", "NUFIP2", "RHOQ", "TNFSF13B", "LSP1", "ZMYM2", "NAIP", "DRAIC", "TSG101", "LPGAT1", "KMT5B", "ATG2A", "UBN1", "SPOP", "ITGAL", "INPP4A", "DICER1", "JMJD6", "TRANK1", "SPAST", "RASSF5", "MNDA", "CSDE1", "EVI5", "ATP2B4", "UBE2J1", "FTX", "YIPF4", "UBE2G1", "MARCKS", "MAU2", "BRD4", "STAG1", "ZFAND6", "DNAJC3", "GNG2", "H3F3A", "FLOT2", "MARK2", "USP9X", "DNAJB6", "ATP11A", "COQ10B", "USP10", "WDR20", "UTY", "DENND6A", "STK17A", "PPP6C", "KIAA0556", "ATG13")
+Tumor_Neu_Sig <- c("IL1B", "IER3", "SOCS3", "RHOH", "IL1RN", "ACTG1", "OSM", "TNFAIP3", "ZFP36", "PPIF", "PTEN", "HCAR2", "OLR1", "AC015912.3", "AL049651.1", "IGKC", "SRSF3", "AC006369.1", "ADM", "GADD45B", "CCL3L1", "CD69", "CCL4L2", "LINC01366", "C15orf48", "CCL4", "PLAU", "HES4", "IL1A", "CCL3", "CXCL2", "IGHGP", "C3AR1", "IGLC2", "HBEGF", "HSPA1B", "CXCL8", "PFN1", "ECHDC1", "HSP90AB1", "TNFAIP6", "EIF4A3", "CD14", "CDKN1A", "PPP1R15A", "AZIN1-AS1", "EHD1", "MIR3945HG", "AC022498.1", "IVNS1ABP", "ACTB", "NFKBIA", "N4BP2", "ETS2", "CXCL1", "ISG15", "IRAK2", "VEGFA", "DUSP2", "CCRL2", "PNP", "TRAF1", "SERPINB9", "AC009303.2", "LCP2", "CD83", "ENO1", "IER5", "NFKBIZ", "CD24", "EEF1A1", "CCR5AS", "AC079209.1", "DCUN1D3", "G0S2", "IER2", "AP001042.1", "ATF4", "GLA", "JOSD1", "USP36", "SLC20A1", "TPT1", "CYBB", "KLF10", "SNHG25", "HLA-DRA", "SQSTM1", "INHBA", "LINC00513", "ZC3H12A", "SERTAD1", "RPLP1", "JUN", "RGCC", "ALAS1", "TMSB10", "WSB1", "RPS28", "GBP1", "GK", "IRF7", "RPL10", "HSPA1A", "ERG", "RAB7A", "MYL12A", "DDIT3", "CEACAM8", "RETN", "IFIT2", "FLNA", "TPI1", "STOX2", "RPL8", "SAT1", "LCN2", "RPL36", "SOD2", "NR4A3", "DSE", "PTMA", "SRSF7", "SATB1-AS1", "ANXA1", "BCL2A1", "ICAM1", "NFKBIZ", "IFITM3", "PHACTR1", "ZNF267", "CREM", "PDE4B", "SLC26A3", "DDX60L", "CLEC4A", "PLEK", "IFITM1", "AC016831.1", "H3F3B")
+Egr1_pos_Neu_Sig <- c("EGR1", "IER3", "IL1B", "RHOH", "IL1RN", "ACTG1", "SOCS3", "HCAR3", "OSM", "TNFAIP3", "ZFP36", "PPIF", "HCAR2", "OLR1", "AC015912.3", "AL049651.1", "IGKC", "SRSF3", "AC006369.1", "ADM", "GADD45B", "CCL3L1", "CD69", "CCL4L2", "LINC01366", "C15orf48", "CCL4", "PLAU", "HES4", "IL1A", "CCL3", "CXCL2", "IGHGP", "C3AR1", "IGLC2", "HBEGF", "HSPA1B", "CXCL8", "PFN1", "ECHDC1", "HSP90AB1", "TNFAIP6", "EIF4A3", "CD14", "CDKN1A", "PPP1R15A", "AZIN1-AS1", "EHD1", "MIR3945HG", "AC022498.1", "IVNS1ABP", "ACTB", "NFKBIA", "N4BP2", "ETS2", "CXCL1", "ISG15", "IRAK2", "VEGFA", "DUSP2", "CCRL2", "PNP", "TRAF1", "SERPINB9", "AC009303.2", "LCP2", "CD83", "ENO1", "IER5", "NFKBIZ", "CD24", "EEF1A1", "CCR5AS", "AC079209.1", "DCUN1D3", "G0S2", "IER2", "AP001042.1", "ATF4", "GLA", "JOSD1", "USP36", "SLC20A1", "TPT1", "CYBB", "KLF10", "SNHG25", "HLA-DRA", "SQSTM1", "INHBA", "LINC00513", "ZC3H12A", "SERTAD1", "RPLP1", "JUN", "RGCC", "ALAS1", "TMSB10", "WSB1", "RPS28", "GBP1", "GK", "IRF7", "RPL10", "HSPA1A", "ERG", "RAB7A", "MYL12A", "DDIT3", "CEACAM8", "RETN", "IFIT2", "FLNA", "TPI1", "STOX2", "RPL8", "SAT1", "LCN2", "RPL36", "SOD2", "NR4A3", "DSE", "PTMA", "SRSF7", "SATB1-AS1", "ANXA1", "BCL2A1", "ICAM1")  
+Egr1_neg_Neu_Sig <- c("SORL1", "LYN", "SSH2", "RIPOR2", "CPPED1", "CELF2", "STK17B", "VMP1", "SMCHD1", "PTEN", "SMAP2", "XPO6", "PTPRC", "MYO1F", "COP1", "DOCK5", "CAMK1D", "LRRK2", "SRPK2", "FAM49B", "NIBAN1", "PREX1", "CSF3R", "GAB2", "ANKRD44", "NCOA1", "MED13L", "PICALM", "MEGF9", "CREB5", "PRKCB", "CPQ", "TNRC6B", "APBB1IP", "FOXO3", "RICTOR", "PLXNC1", "EPHB1", "ACAP2", "ABHD2", "USP32", "LRRFIP1", "PARP8", "MME", "PLXDC2", "SLC12A6", "SLC8A1", "ELF2", "SLC25A37", "PELI1", "RAB11FIP1", "RASSF3", "TBL1X", "SLCO3A1", "PHF21A", "TBXAS1", "LRMP", "UBR2", "CYTIP", "UBE2R2", "SEC14L1", "KCNJ15", "ARHGAP15", "ERGIC1", "PIK3CD", "RAF1", "MAP3K2", "IQGAP1", "RNF24", "PTPRJ", "USP15", "MAP3K5", "IQSEC1", "FYB1", "JAK1", "WDFY3", "CREBBP", "PKN2", "TMCC3", "HIPK3", "AOAH", "TMCC1", "PAN3", "PCBP1-AS1", "SIPA1L1", "MBP", "RAPGEF2", "PECAM1", "UBE2D3", "YPEL5", "STK10", "AGTPBP1", "PCNX1", "IGF2R", "VSIR", "NEDD9", "CCNJL", "TGFBR2", "FKBP5", "SNRK", "SOS2", "SLC11A1", "TBC1D1", "ARID4B", "IGF1R", "NCOA2", "STK4", "PACSIN2", "PACS1", "KDM2A", "BAZ2B", "ZFAND3", "ENTPD1", "KDM4B", "RAP1GAP2", "MAPK1", "ARHGEF40", "MGAM", "DOCK2", "PPP3CA", "ARHGAP25", "AGO4", "SULF2", "CACUL1", "FBXW7", "ST8SIA4", "JARID2", "TMEM164", "CIR1", "FAM126B", "RPS6KA5", "CHST15", "SH3KBP1", "MAP3K1", "CR1", "ALPL", "ASAP1", "LIMK2", "MAP3K3", "KIF13A", "TET2", "INPP5D", "USP4", "LINC00486", "FBXO33", "PELI2", "ROCK1", "FMNL1", "VNN2", "DGLUCY", "IP6K1", "MTRNR2L12", "REPS2", "DOCK8", "CDK19", "DYSF", "TMEM154", "PTPRE", "MAP2K4", "WIPF1", "TUBA1A", "USP3", "MIR29B2CHG", "CDC42SE2", "PIAS1", "ZDHHC18", "ECE1", "ITPK1", "PPP1CB", "FGD3", "MICAL2", "RB1CC1", "GNA13", "AHCTF1", "RELL1", "HCK", "DIP2B", "RNF130", "EPB41", "WWP2", "FRY", "JAML", "PPP1R12A", "PDE3B", "PHC2", "ABHD15-AS1", "CCND3", "OSBPL8", "KMT2C", "NIPBL", "JMJD1C", "HECW2", "SEMA4D", "KLHL2", "SLC44A2", "COTL1", "MAN1A1", "NDEL1", "ACSL4", "AC022217.3", "WDR26", "AP001011.1", "RFX2", "TECPR2", "ELMO1", "SUSD6", "AP003086.1", "TCP11L2", "IFNAR2", "DHRSX", "AKNA", "FPR1", "STAT5B", "ATP2B1", "LRP10", "EP300", "ARHGAP30", "CUL3", "IL17RA", "SBF2", "DOCK11", "EIF4E3", "TOP1", "ABHD3", "IL1R2", "ADAM19", "MIDN", "TBC1D14", "TUT7", "PPP4R1", "RNASET2", "MAP4K4", "ITCH", "TPST1", "GPR155", "UBE4B", "PLCG2", "VPS13B", "KIAA0232", "GRB2", "ACTR2", "MCTP2", "RNF10", "LMTK2", "RBM39", "GNAI3", "ARNTL", "KLF3", "ADGRE2", "FBXL20", "DGCR2", "CNTNAP3B", "FNIP1", "NLRP1", "TNFRSF10C", "SIRPB2", "SLC6A6", "ZNF586", "FAM49A", "KIAA0825", "RESF1", "CFLAR", "ELL", "KIF1B", "LYST", "DYRK1A", "RAB2A", "IPMK", "SH3GLB1", "ST3GAL2", "RRP12", "MOB3A", "OGA", "GSK3B", "KAT6A", "KIAA1324", "BCAS3", "EPS15L1", "CSNK1D", "UIMC1", "CNTNAP3", "SIK3", "RPS6KA3", "SYNE2", "LAPTM4A", "EGLN1", "MKLN1", "NLRP12", "VNN3", "NDE1", "SKAP2", "CAB39", "FCGR3B", "AL513327.1", "KDM7A", "MAST3", "ADGRE5", "DPEP2", "LMBRD1", "PHF12", "CREBRF", "RC3H1", "MPZL1", "SP3", "SPI1", "RASSF2", "STK40", "MAPK14", "SVIL", "ZNF429", "SLMAP", "SLC37A3", "PXN", "DHX34", "ZNF516", "DPYD", "KANSL1", "CEP63", "TLR2", "SHOC1", "ACOX1", "RAP1A", "GAB1", "UBXN2B", "ATP11B", "NR3C1", "ARAP1", "ANKRD13A", "NIN", "MAK", "UHRF1BP1L", "NHSL2", "NOTCH2", "CLIP1", "TLE3", "RAPGEF1", "XRN2", "FBXL13", "DECR1", "CMIP", "CCM2", "MYO9B", "FOXP1", "CD46", "COQ7", "PPP1R12B", "GIT2", "KDM6A", "DISC1", "LPCAT3", "ZNF148", "HBP1", "INKA2", "PPM1F", "OSBPL2", "SASH3", "ATF6", "SESN2", "ATG16L2", "SH2D3C", "CA4", "HPCAL1", "MAML3", "SNX10", "CASP8", "STX3", "KCNQ1", "FAM53B", "HECA", "ATP6V1A", "MBOAT7", "NUP153", "RAB43", "BIN3", "UBE2D1", "ALPK1", "IFNGR1", "CNTNAP3C", "AL390957.1", "CUX1", "PPCDC", "NFAM1", "AC114760.2", "FLI1", "CFAP45", "IQGAP2", "IRS2", "BTNL8", "AP1G1", "VPS8", "CYB5R4", "ZER1", "SNX18", "RGS18", "PPP3R1", "TAOK3", "KREMEN1", "CTSS", "CBL", "TLE4", "MTMR3", "RPS6KA1", "DENND3", "SARAF", "HSDL2", "CTBS", "SHKBP1", "FOXO1", "NUAK2", "ADGRE3", "PRKCZ", "SETD2", "ITM2B", "ULK1", "C5AR2", "PYGL", "SHOC2", "KCMF1", "GAS7", "MTRNR2L8", "HCG27", "FOXN3")
+
+library(orthogene)
+
+# Convert human to mouse
+Cd74_Neu_Sig_mouse <- convert_orthologs(
+  gene_df = Cd74_Neu_Sig,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species")
+Cd74_Neu_Sig <- rownames(Cd74_Neu_Sig_mouse)
+gene.sets$Cd74_Neu_Sig_mapped <- Cd74_Neu_Sig
+
+conversion1 <- convert_orthologs(
+  gene_df = Blood_Neu_Sig1,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species")
+conversion2 <- convert_orthologs(
+  gene_df = Blood_Neu_Sig2,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species"
+)
+Blood_Neu_Sig_mouse <- unique(c(rownames(conversion1), rownames(conversion2)))
+gene.sets$Blood_Neu_Sig <- Blood_Neu_Sig_mouse
+gene.sets$Blood_Neu_Sig_mapped <- Blood_Neu_Sig_mouse
+gene.sets$Blood_Neu_Sig <- NULL
+
+Tumor_Neu_Sig <- unique(Tumor_Neu_Sig)
+Tumor_Neu_Sig_mouse <- convert_orthologs(
+  gene_df = Tumor_Neu_Sig,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species")
+Tumor_Neu_Sig <- rownames(Tumor_Neu_Sig_mouse)
+gene.sets$Tumor_Neu_Sig_mapped <- Tumor_Neu_Sig
+
+Egr1_pos_Neu_Sig <- unique(Egr1_pos_Neu_Sig)
+Egr1_pos_Neu_Sig_mouse <- convert_orthologs(
+  gene_df = Egr1_pos_Neu_Sig,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species")
+Egr1_pos_Neu_Sig <- rownames(Egr1_pos_Neu_Sig_mouse)
+gene.sets$Egr1_pos_Neu_Sig_mapped <- Egr1_pos_Neu_Sig
+
+Egr1_neg_Neu_Sig <- unique(Egr1_neg_Neu_Sig)
+Egr1_neg_Neu_Sig_mouse <- convert_orthologs(
+  gene_df = Egr1_neg_Neu_Sig,
+  input_species = "human",
+  output_species = "mouse",
+  non121_strategy = "drop_both_species")
+Egr1_neg_Neu_Sig <- rownames(Egr1_neg_Neu_Sig_mouse)
+gene.sets$Egr1_neg_Neu_Sig_mapped <- Egr1_neg_Neu_Sig
+
+library(tidyverse)
+library(fgsea)
+
+pmn_markers0 <- pmn_markers[pmn_markers$cluster == "0", ]  # pmn_markers obtained using FindAllMarkers
+pmn_markers0 <- pmn_markers0 %>% arrange(desc(avg_log2FC))
+fold_changes0 <- pmn_markers0$avg_log2FC
+names(fold_changes0) <- pmn_markers0$gene
+
+pmn_markers1 <- pmn_markers[pmn_markers$cluster == "1", ]
+pmn_markers1 <- pmn_markers1 %>% arrange(desc(avg_log2FC))
+fold_changes1 <- pmn_markers1$avg_log2FC
+names(fold_changes1) <- pmn_markers1$gene
+
+pmn_markers2 <- pmn_markers[pmn_markers$cluster == "2", ]
+pmn_markers2 <- pmn_markers2 %>% arrange(desc(avg_log2FC))
+fold_changes2 <- pmn_markers2$avg_log2FC
+names(fold_changes2) <- pmn_markers2$gene
+
+pmn_markers3 <- pmn_markers[pmn_markers$cluster == "3", ]
+pmn_markers3 <- pmn_markers3 %>% arrange(desc(avg_log2FC))
+fold_changes3 <- pmn_markers3$avg_log2FC
+names(fold_changes3) <- pmn_markers3$gene
+
+# GSEA analysis
+gsea0 <- fgsea(pathways = gene.sets,
+                  stats = fold_changes0,
+                  eps = 0.0,
+                  minSize=5,
+                  maxSize=500)
+
+gsea1 <- fgsea(pathways = gene.sets,
+                  stats = fold_changes1,
+                  eps = 0.0,
+                  minSize=5,
+                  maxSize=500)
+
+gsea2 <- fgsea(pathways = gene.sets,
+                  stats = fold_changes2,
+                  eps = 0.0,
+                  minSize=5,
+                  maxSize=500)
+
+gsea3 <- fgsea(pathways = gene.sets,
+                  stats = fold_changes3,
+                  eps = 0.0,
+                  minSize=5,
+                  maxSize=500)
+
+gsea_combined <- bind_rows(
+  gsea0 %>% mutate(Cluster = "0"),
+  gsea1 %>% mutate(Cluster = "1"),
+  gsea2 %>% mutate(Cluster = "2"),
+  gsea3 %>% mutate(Cluster = "3"))
+
+signature_order <- c(
+  "Matured_Neu_Sig",
+  "T1_Neu_Sig", 
+  "T2_Neu_Sig",
+  "T3_Neu_Sig",
+  "PMN_MDSC",
+  "Activated_PMN_MDSC",
+  "Ly6Ehi_Neu_Sig",
+  "Cd74_Neu_Sig_mapped",
+  "Blood_Neu_Sig_mapped",
+  "Tumor_Neu_Sig_mapped",
+  "Egr1_pos_Neu_Sig_mapped",
+  "Egr1_neg_Neu_Sig_mapped"
+)
+
+gsea_combined <- gsea_combined %>%
+  mutate(pathway = factor(pathway, levels = rev(signature_order)))
+library(data.table)
+gsea_combined[, leadingEdge := sapply(leadingEdge, function(x) paste(x, collapse = ";"))]
+write.csv(gsea_combined, file="PMN_cluster_level_GSEA_results.csv", row.names = FALSE)
+
+p <- ggplot(gsea_combined, aes(x = Cluster, y = pathway)) +
+  geom_point(aes(size = padj, color = NES)) +
+  scale_color_gradient2(
+    low = "blue", 
+    mid = "white", 
+    high = "red",
+    midpoint = 0,
+    name = "NES"
+  ) +
+  scale_size_continuous(
+    name = "p.adj",
+    range = c(2, 10),
+    trans = "reverse",
+    breaks = c(0.0001, 0.001, 0.01, 0.05, 0.1, 0.5),  # Added 0.05
+    labels = c("0.0001", "0.001", "0.01", "0.05", "0.1", "0.5")  # Added 0.05
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 10),
+    axis.title = element_text(size = 12, face = "bold"),
+    legend.key.height = unit(1.5, "cm")
+  ) +
+  labs(
+    x = "PMN Cluster",
+    y = "Signatures",
+    title = "GSEA Enrichment Across Clusters"
+  )
+
+print(p)
+
+p <- ggplot(gsea_combined, aes(x = Cluster, y = pathway)) +
+  geom_point(aes(size = -log10(padj), color = NES)) +
+  scale_color_gradient2(
+    low = "blue", 
+    mid = "white", 
+    high = "red",
+    midpoint = 0,
+    name = "NES"
+  ) +
+  scale_size_continuous(
+    name = "-log10(p.adj)",
+    range = c(2, 14),
+    breaks = c(0.3, 1, 1.3, 2, 3, 4),
+    labels = c("0.3", "1", "1.3", "2", "3", "4")
+  ) +
+  theme_bw() +
+  theme(
+    axis.text.x = element_text(size = 12),
+    axis.text.y = element_text(size = 15),
+    axis.title = element_text(size = 15, face = "bold"),
+    legend.key.height = unit(1, "cm")
+  ) +
+  labs(
+    x = "PMN Cluster",
+    y = "Signatures",
+    title = "PMN cluster GSEA using Established Signatures"
+  )
+
+# ===============================
+# OTHER FIGURE COMPONENTS
+# ===============================
+# Supp Fig 2A: ssGSEA using escape pacakge (see https://github.com/BorchLab/escape)
+# Supp Fig 2B: AUCell analysis (see https://github.com/aertslab/AUCell)
+# Supp Fig 2C: UMAP after Seurat pipeline
+# Supp Fig 2D: Composition + relative abundance (sccomp + ggplot)
+# Supp Fig 2F: Dotplot of selected genes
+# Supp Fig 2G: Slingshot trajectory analysis (see https://github.com/kstreet13/slingshot)
+# Supp Fig 2H: Single-cell reference mapping using Seurat (see https://satijalab.org/seurat/articles/integration_mapping.html)
