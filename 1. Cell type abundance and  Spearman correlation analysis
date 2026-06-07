@@ -310,10 +310,3 @@ cor_table <- combn(colnames(mat), 2, simplify = FALSE) %>%
   arrange(p_value)
 
 write.csv(cor_table, "all_pairwise_spearman.csv", row.names = FALSE)
-
-# ===============================
-# OTHER FIGURE COMPONENTS
-# ===============================
-# Fig 2A: Seurat standard workflow -- QC filtering, normalization (SCTransform), dimensionality reduction, clustering, UMAP visualization, DEG and manual annotation
-# Fig 2D: irGSEA analysis (see https://github.com/chuiqin/irGSEA)
-# Fig 2F: CellChat analysis (see https://github.com/jinworks/CellChat)
